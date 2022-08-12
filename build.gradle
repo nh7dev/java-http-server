@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'dev.nh7'
+version '1.0'
+
+repositories {
+
+}
+
+dependencies {
+
+}

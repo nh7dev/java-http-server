@@ -1,4 +1,4 @@
-package dev.nh7.javahttpserver;
+package dev.nh7.javahttpserver.example;
 
 public class ExampleServerApplication {
 
