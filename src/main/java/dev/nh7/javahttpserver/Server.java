@@ -113,7 +113,8 @@ public class Server {
 
                 OutputStream out = exchange.getResponseBody();
                 out.write(messageBytes);
-                out.close();
+
+                exchange.close();
 
                 /*if (debug) {
                     Utils.log("response " + method + " " + url + " to " + ip);
@@ -121,6 +122,7 @@ public class Server {
 
             } catch (Exception e) {
                 Utils.log("an error occurred: " + e.getMessage());
+                exchange.close();
             }
         };
     }
