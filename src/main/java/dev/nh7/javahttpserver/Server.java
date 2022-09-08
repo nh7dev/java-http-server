@@ -88,7 +88,7 @@ public class Server {
                 String urlQuery = url.getQuery();
 
                 if (debug) {
-                    Utils.log("got request from " + ip + ": " + method + " " + url);
+                    Utils.log("request " + method + " " + url + " from " + ip);
                 }
 
                 ServerResponse response;
@@ -98,10 +98,6 @@ public class Server {
                     response = new ServerResponse(400, "too many requests from your ip, try again in a minute");
                 } else {
                     response = findServerResponse(urlPath, urlQuery);
-                }
-
-                if (debug) {
-                    Utils.log("found response for " + ip + ": " + method + " " + url);
                 }
 
                 int status = response.getStatus();
@@ -119,9 +115,9 @@ public class Server {
                 out.write(messageBytes);
                 out.close();
 
-                if (debug) {
-                    Utils.log("sent response for " + ip + ": " + method + " " + url);
-                }
+                /*if (debug) {
+                    Utils.log("response " + method + " " + url + " to " + ip);
+                }*/
 
             } catch (Exception e) {
                 Utils.log("an error occurred: " + e.getMessage());
