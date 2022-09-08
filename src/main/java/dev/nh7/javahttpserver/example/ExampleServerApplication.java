@@ -14,6 +14,7 @@ public class ExampleServerApplication {
             ExampleServerController controller = new ExampleServerController();
             Server server = new Server(port);
             server.addController(controller);
+            server.addHeader("Access-Control-Allow-Origin", "*"); //enable cors
             //server.setHttps(SSLContext.getDefault());
             //server.setRequestLimit(new RequestLimitConfiguration(10, 60000, 50)); 10 requests per 60 seconds per ip
             //server.setDebug(false);

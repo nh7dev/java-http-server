@@ -20,6 +20,8 @@ public class Server {
 
     private ArrayList<ServerController> controllers = new ArrayList<>();
 
+    private final HashMap<String, String> headers = new HashMap<>();
+
     private HttpsConfigurator httpsConfiguration;
 
     private RequestLimitConfiguration requestLimitConfiguration;
@@ -38,6 +40,10 @@ public class Server {
 
     public void addController(ServerController controller) {
         controllers.add(controller);
+    }
+
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
     }
 
     public void setHttps(SSLContext ssl) {
@@ -100,7 +106,10 @@ public class Server {
 
                 int status = response.getStatus();
                 byte[] messageBytes = response.getContent().getBytes();
-                for (Map.Entry<String, String> header : response.getHeaders().entrySet()) {
+                for (Map.Entry<String, String> header : headers.entrySet()) { //general headers
+                    exchange.getResponseHeaders().add(header.getKey(), header.getValue());
+                }
+                for (Map.Entry<String, String> header : response.getHeaders().entrySet()) { //individual headers
                     exchange.getResponseHeaders().add(header.getKey(), header.getValue());
                 }
 

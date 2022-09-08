@@ -21,7 +21,6 @@ public class ExampleServerController extends ServerController {
     ) {
         String text = "Hello " + name;
         Map<String, String> headers = Map.of(
-                "Access-Control-Allow-Origin", "*", //enable cors
                 "Some-Header", "somevalue"
         );
         return new ServerResponse(200, text, headers);
