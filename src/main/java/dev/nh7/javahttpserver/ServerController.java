@@ -57,7 +57,8 @@ public abstract class ServerController {
 
             try {
                 methodParameterValues[i] = methodParameter.getType().getConstructor(String.class).newInstance(queryParameterValue);
-            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException |
+                     InvocationTargetException e) {
                 return new ServerResponse(400, "query parameter '" + queryParameter.parameter() + "' in wrong format");
             }
 

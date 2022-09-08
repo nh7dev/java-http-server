@@ -11,6 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 
 public class Server {
@@ -22,8 +23,6 @@ public class Server {
     private HttpsConfigurator httpsConfiguration;
 
     private RequestLimitConfiguration requestLimitConfiguration;
-
-    private String cors;
 
     private boolean debug = true;
 
@@ -47,10 +46,6 @@ public class Server {
 
     public void setRequestLimit(RequestLimitConfiguration requestLimitConfiguration) {
         this.requestLimitConfiguration = requestLimitConfiguration;
-    }
-
-    public void setCors(String cors) {
-        this.cors = cors;
     }
 
     public void setDebug(boolean debug) {
@@ -80,10 +75,6 @@ public class Server {
         return exchange -> {
             try {
 
-                if (cors != null) {
-                    exchange.getResponseHeaders().add("Access-Control-Allow-Origin", cors);
-                }
-
                 String method = exchange.getRequestMethod();
                 String ip = exchange.getRemoteAddress().getHostString();
                 URI url = exchange.getRequestURI();
@@ -91,7 +82,7 @@ public class Server {
                 String urlQuery = url.getQuery();
 
                 if (debug) {
-                    System.out.println("request from " + ip + ": " + method + " " + url);
+                    Utils.log("got request from " + ip + ": " + method + " " + url);
                 }
 
                 ServerResponse response;
@@ -103,8 +94,15 @@ public class Server {
                     response = findServerResponse(urlPath, urlQuery);
                 }
 
-                int status = response.status();
-                byte[] messageBytes = response.message().getBytes();
+                if (debug) {
+                    Utils.log("found response for " + ip + ": " + method + " " + url);
+                }
+
+                int status = response.getStatus();
+                byte[] messageBytes = response.getContent().getBytes();
+                for (Map.Entry<String, String> header : response.getHeaders().entrySet()) {
+                    exchange.getResponseHeaders().add(header.getKey(), header.getValue());
+                }
 
                 exchange.sendResponseHeaders(status, messageBytes.length);
 
@@ -112,8 +110,12 @@ public class Server {
                 out.write(messageBytes);
                 out.close();
 
+                if (debug) {
+                    Utils.log("sent response for " + ip + ": " + method + " " + url);
+                }
+
             } catch (Exception e) {
-                System.out.println("an error occurred: " + e.getMessage());
+                Utils.log("an error occurred: " + e.getMessage());
             }
         };
     }

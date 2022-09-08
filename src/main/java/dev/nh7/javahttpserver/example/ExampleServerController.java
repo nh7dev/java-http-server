@@ -5,6 +5,8 @@ import dev.nh7.javahttpserver.ServerPath;
 import dev.nh7.javahttpserver.ServerQueryParameter;
 import dev.nh7.javahttpserver.ServerResponse;
 
+import java.util.Map;
+
 public class ExampleServerController extends ServerController {
 
     @ServerPath(path = "/")
@@ -18,7 +20,11 @@ public class ExampleServerController extends ServerController {
             @ServerQueryParameter(parameter = "name") String name
     ) {
         String text = "Hello " + name;
-        return new ServerResponse(200, text);
+        Map<String, String> headers = Map.of(
+                "Access-Control-Allow-Origin", "*", //enable cors
+                "Some-Header", "somevalue"
+        );
+        return new ServerResponse(200, text, headers);
     }
 
 }

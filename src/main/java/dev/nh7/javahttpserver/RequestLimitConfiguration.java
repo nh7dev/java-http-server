@@ -22,7 +22,7 @@ public class RequestLimitConfiguration {
 
     private void cleanCache() {
         if (ipRequests.size() > maxCacheSize) {
-            System.out.println("cleaning cache");
+            Utils.log("cleaning cache");
             long now = System.currentTimeMillis();
             ipRequests.entrySet().removeIf(entry -> {
                 int last = entry.getValue().size() - 1;
